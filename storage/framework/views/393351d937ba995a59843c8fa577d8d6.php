@@ -190,15 +190,47 @@
                                 ['label' => '8-14 Pax', 'single' => $tourPackage->price_8_14, 'tandem' => $tourPackage->tandem_price_8_14 ?? $tourPackage->activity_tandem_price],
                             ];
                         ?>
-                        <div class="mt-5 overflow-x-auto rounded-2xl border border-slate-200 bg-white">
-                            <div class="grid min-w-[660px] grid-cols-3 border-b border-slate-200 bg-slate-50">
+                        <div class="mt-5 overflow-hidden rounded-2xl border border-slate-200 bg-white sm:hidden">
+                            <table class="w-full table-fixed text-left">
+                                <thead class="bg-slate-50">
+                                    <tr class="border-b border-slate-200">
+                                        <th scope="col" class="w-1/4 px-3 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-600 sm:px-4 sm:text-xs">Pax</th>
+                                        <th scope="col" class="w-[37.5%] px-3 py-3 text-[10px] font-bold uppercase tracking-wider text-amber-700 sm:px-4 sm:text-xs">Single</th>
+                                        <th scope="col" class="w-[37.5%] px-3 py-3 text-[10px] font-bold uppercase tracking-wider text-indigo-700 sm:px-4 sm:text-xs">Tandem</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $activityTiers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tier): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoop($loop->index); ?><?php endif; ?>
+                                        <tr class="border-b border-slate-100 last:border-b-0">
+                                            <th scope="row" class="px-3 py-4 text-sm font-bold text-slate-900 sm:px-4 sm:text-base"><?php echo e($tier['label']); ?></th>
+                                            <td class="px-3 py-4 sm:px-4">
+                                                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($tier['single']): ?>
+                                                    <span class="pricing-display text-sm font-black text-[#0A2240] sm:text-lg">Rp <?php echo e(number_format($tier['single'], 0, ',', '.')); ?></span>
+                                                <?php else: ?>
+                                                    <span class="text-xs italic text-slate-400 sm:text-sm">Contact us</span>
+                                                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                                            </td>
+                                            <td class="px-3 py-4 sm:px-4">
+                                                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($tier['tandem']): ?>
+                                                    <span class="pricing-display text-sm font-black text-[#0A2240] sm:text-lg">Rp <?php echo e(number_format($tier['tandem'], 0, ',', '.')); ?></span>
+                                                <?php else: ?>
+                                                    <span class="text-xs italic text-slate-400 sm:text-sm">Contact us</span>
+                                                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                                            </td>
+                                        </tr>
+                                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="mt-5 hidden overflow-hidden rounded-2xl border border-slate-200 bg-white sm:block">
+                            <div class="grid grid-cols-3 border-b border-slate-200 bg-slate-50">
                                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $activityTiers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tier): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoop($loop->index); ?><?php endif; ?>
                                     <div class="border-r border-slate-200 p-4 last:border-r-0">
                                         <h3 class="font-bold tracking-tight text-slate-900"><?php echo e($tier['label']); ?></h3>
                                     </div>
                                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                             </div>
-                            <div class="grid min-w-[660px] grid-cols-3">
+                            <div class="grid grid-cols-3">
                                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $activityTiers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tier): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoop($loop->index); ?><?php endif; ?>
                                     <div class="border-r border-slate-200 p-4 last:border-r-0">
                                         <p class="text-[10px] font-bold uppercase tracking-wider text-amber-700">Single / person</p>

@@ -3,39 +3,58 @@
 <?php $__env->startSection('content'); ?>
 <?php echo $__env->make('partials.hero-slider', ['banners' => $banners], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
-<section id="destinasi" class="py-20 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-7">
+<section id="destinasi" class="py-20 relative overflow-hidden bg-[#e8f1ee]">
+    
+    
+    <div class="absolute inset-0 opacity-15 pointer-events-none bg-repeat bg-center mix-blend-multiply" 
+         style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'80\' height=\'80\' viewBox=\'0 0 100 100\' fill=\'%232d5a43\'><path d=\'M30,10 Q50,30 30,50 Q10,30 30,10 Z M70,50 Q90,70 70,90 Q50,70 70,50 Z\'/></svg>');">
+    </div>
 
+    
+    <div class="absolute inset-0 bg-gradient-to-b from-[#edf4f1]/60 via-transparent to-[#e4eee9]/80 pointer-events-none"></div>
+
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <?php
+            $destinationPackages = $featuredPackages->take(7)->values();
+            $heroTitle = 'Ubud ATV & Ayung Rafting Experience';
+            $heroPackage = $destinationPackages->first(fn ($package) => $package->title === $heroTitle)
+                ?? $destinationPackages->first();
+            $remainingPackages = $destinationPackages
+                ->reject(fn ($package) => $heroPackage && $package->id === $heroPackage->id)
+                ->values();
+        ?>
+
+        
+        <div class="grid grid-cols-2 lg:grid-cols-4 lg:grid-rows-[auto_1fr_1fr] gap-3 lg:gap-6 items-stretch">
             
-            <div class="flex flex-col justify-center pr-4">
-                <span class="text-indigo-600 font-bold uppercase tracking-wider text-[10px] md:text-xs mb-2">
-                    The best picks from locals
-                </span>
-                <h2 class="text-2xl md:text-4xl font-extrabold text-gray-900 mb-3 brand-font leading-tight">
-                    Popular<br>Destinations
-                </h2>
-                <div class="w-16 h-1 bg-orange-500 rounded-full mb-4"></div>
-                <p class="text-gray-500 text-xs md:text-sm leading-relaxed mb-6">
+            
+            <div class="col-span-2 lg:col-span-2 lg:col-start-2 lg:row-start-1 flex flex-col justify-center items-center text-center max-w-2xl mx-auto mb-6 lg:mb-4 lg:py-4">
+                <span class="text-indigo-600 font-bold uppercase tracking-wider text-[10px] lg:text-xs mb-1">The best picks from locals</span>
+                <h2 class="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-3 brand-font">Popular Destinations</h2>
+                <div class="w-12 h-1 bg-yellow-500 mb-4 rounded-full"></div>
+                <p class="text-gray-600 text-xs lg:text-sm leading-relaxed max-w-md mx-auto mb-6">
                     Uncover the wonders of Bali—from its sun-drenched white sands to the misty, emerald highlands.
                 </p>
                 <a href="<?php echo e(route('tour.index')); ?>"
-                    class="inline-block bg-indigo-600 text-white font-semibold py-2.5 px-6 rounded-full text-xs md:text-sm hover:bg-indigo-700 transition-colors shadow hover:shadow-lg w-fit">
+                    class="inline-block bg-indigo-600 text-white font-semibold py-2.5 px-8 rounded-full text-xs lg:text-sm hover:bg-indigo-700 transition-colors shadow-md hover:shadow-lg">
                     See More
                 </a>
             </div>
 
             
-            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $featuredPackages->where('is_featured', true)->take(7); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $package): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoop($loop->index); ?><?php endif; ?>
-            <article
-                class="package-card bg-white rounded-xl md:rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group flex flex-col">
+            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($heroPackage): ?>
+            <?php
+                $package = $heroPackage;
+            ?>
+            <article class="package-card col-span-2 lg:col-span-2 lg:col-start-2 lg:row-start-2 lg:row-span-2 bg-white/90 backdrop-blur-sm rounded-xl lg:rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group flex flex-col">
 
                 
-                <a href="<?php echo e(route('tour.show', $package)); ?>" class="flex items-center justify-center relative w-full aspect-video overflow-hidden bg-light">
+                <a href="<?php echo e(route('tour.show', $package)); ?>" class="flex items-center justify-center relative w-full aspect-video lg:aspect-auto lg:flex-1 overflow-hidden bg-gray-100">
                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($package->thumbnail): ?>
-                    <img src="<?php echo e($package->thumbnail_url); ?>" alt="<?php echo e($package->title); ?>" class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500">
+                    <img src="<?php echo e($package->thumbnail_url); ?>" alt="<?php echo e($package->title); ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                     <?php elseif($package->images->isNotEmpty()): ?>
-                    <img src="<?php echo e($package->images->first()->image_url); ?>" alt="<?php echo e($package->title); ?>" class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500">
+                    <img src="<?php echo e($package->images->first()->image_url); ?>" alt="<?php echo e($package->title); ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                     <?php else: ?>
                     <div class="w-full h-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center">
                         <i class="fas fa-image text-white text-4xl opacity-40"></i>
@@ -43,62 +62,122 @@
                     <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($package->discounted_price && $package->discounted_price < $package->price): ?>
-                    <span class="absolute top-3 right-3 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow">Disc</span>
+                    <span class="absolute top-4 right-4 bg-red-500 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">Disc</span>
                     <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                 </a>
 
                 
-                <div class="p-2 md:p-5 flex flex-col flex-grow">
+                <div class="p-4 lg:p-6 flex flex-col bg-white/95">
                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($package->duration): ?>
-                    <p class="text-xs text-gray-400 mb-1.5 flex items-center gap-1">
-                        <i class="fas fa-clock"></i> <?php echo e($package->duration); ?>
+                    <p class="text-xs font-medium text-gray-500 mb-2 flex items-center gap-1.5">
+                        <i class="fas fa-clock text-gray-400"></i> <?php echo e($package->duration); ?>
 
                     </p>
                     <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
-                    <h4 class="font-bold text-gray-800 text-xs md:text-base leading-snug mb-1 group-hover:text-yellow-600 transition-colors line-clamp-2 h-[2.6em] md:h-[3em] flex items-start overflow-hidden">
+                    <h4 class="font-bold text-gray-900 text-lg lg:text-2xl leading-tight mb-2 group-hover:text-yellow-600 transition-colors">
                         <a href="<?php echo e(route('tour.show', $package)); ?>" class="block"><?php echo e($package->title); ?></a>
                     </h4>
 
-                    
                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($package->description): ?>
-                    <p class="text-gray-500 text-[10px] md:text-xs mb-4 line-clamp-2 italic">
+                    <p class="text-gray-500 text-xs lg:text-sm mb-4 lg:mb-6 line-clamp-2">
                         <?php echo e($package->description); ?>
 
                     </p>
                     <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
-                    
-                    <div class="flex items-end justify-between pt-2 md:pt-3 border-t border-gray-100 mt-auto">
-                        <div>
-                            <div class="flex flex-col">
-                                <?php
-                                    $allPrices = collect([$package->price_2_4, $package->price_5_7, $package->price_8_14])->filter(fn($price) => $price > 0);
-                                    $lowestPrice = $allPrices->min();
-                                ?>
+                    <div class="flex items-end justify-between pt-3 lg:pt-4 border-t border-gray-100 mt-auto">
+                        <div class="flex flex-col">
+                            <?php
+                                $allPrices = collect([$package->price_2_4, $package->price_5_7, $package->price_8_14])->filter(fn($price) => $price > 0);
+                                $lowestPrice = $allPrices->min();
+                            ?>
 
-                                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($lowestPrice): ?>
-                                <span class="text-[9px] md:text-[10px] text-gray-400 uppercase font-semibold -mb-1">Starts From</span>
-                                <p class="text-xs md:text-lg font-bold text-yellow-700 leading-tight">Rp <?php echo e(number_format($lowestPrice, 0, ',', '.')); ?></p>
-                                <?php else: ?>
-                                <p class="text-[10px] md:text-sm text-gray-400 italic">Get in Touch</p>
-                                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-                            </div>
+                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($lowestPrice): ?>
+                            <span class="text-[10px] lg:text-xs text-gray-400 uppercase font-semibold mb-0.5">Starts From</span>
+                            <p class="text-base lg:text-2xl font-bold text-yellow-700 leading-none">Rp <?php echo e(number_format($lowestPrice, 0, ',', '.')); ?></p>
+                            <?php else: ?>
+                            <p class="text-xs lg:text-sm text-gray-400 italic">Get in Touch</p>
+                            <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                         </div>
-                        <a href="<?php echo e(route('tour.show', $package)); ?>" class="inline-flex items-center bg-yellow-600 hover:bg-yellow-700 text-white text-[10px] md:text-sm font-semibold px-2 py-1 md:px-4 md:py-2 rounded-lg md:rounded-xl transition-colors">Details</a>
+                        <a href="<?php echo e(route('tour.show', $package)); ?>" class="inline-flex items-center bg-yellow-600 hover:bg-yellow-700 text-white text-[10px] lg:text-sm font-semibold px-4 py-1.5 lg:px-6 lg:py-2.5 rounded-lg lg:rounded-xl transition-colors shadow-sm">Details</a>
                     </div>
                 </div>
             </article>
-            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
-            <div class="col-span-3 flex items-center justify-center text-gray-400 text-sm py-10">
-                Coming soon... Destinations will be displayed here once the admin selects them from the dashboard.
-            </div>
             <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+
+            
+            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $remainingPackages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $package): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoop($loop->index); ?><?php endif; ?>
+            <?php
+                $slotClass = match ($loop->index) {
+                    0 => 'lg:col-start-1 lg:row-start-1',
+                    1 => 'lg:col-start-1 lg:row-start-2',
+                    2 => 'lg:col-start-1 lg:row-start-3',
+                    3 => 'lg:col-start-4 lg:row-start-1',
+                    4 => 'lg:col-start-4 lg:row-start-2',
+                    default => 'lg:col-start-4 lg:row-start-3',
+                };
+            ?>
+            <article class="package-card <?php echo e($slotClass); ?> col-span-1 bg-white/90 backdrop-blur-sm rounded-xl lg:rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group flex flex-col">
+
+                <a href="<?php echo e(route('tour.show', $package)); ?>" class="flex items-center justify-center relative w-full aspect-[4/3] lg:aspect-video overflow-hidden bg-gray-100">
+                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($package->thumbnail): ?>
+                    <img src="<?php echo e($package->thumbnail_url); ?>" alt="<?php echo e($package->title); ?>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <?php elseif($package->images->isNotEmpty()): ?>
+                    <img src="<?php echo e($package->images->first()->image_url); ?>" alt="<?php echo e($package->title); ?>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                    <?php else: ?>
+                    <div class="w-full h-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center">
+                        <i class="fas fa-image text-white text-3xl opacity-40"></i>
+                    </div>
+                    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+
+                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($package->discounted_price && $package->discounted_price < $package->price): ?>
+                    <span class="absolute top-2 right-2 lg:top-3 lg:right-3 bg-red-500 text-white text-[9px] lg:text-xs font-bold px-2 py-0.5 lg:px-2.5 lg:py-1 rounded-full shadow">Disc</span>
+                    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                </a>
+
+                <div class="p-2.5 lg:p-4 flex flex-col flex-grow bg-white/95">
+                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($package->duration): ?>
+                    <p class="text-[9px] lg:text-xs font-medium text-gray-500 mb-1 lg:mb-1.5 flex items-center gap-1">
+                        <i class="fas fa-clock text-gray-400"></i> <?php echo e($package->duration); ?>
+
+                    </p>
+                    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+
+                    <h4 class="font-bold text-gray-900 text-[11px] lg:text-base leading-snug mb-1 lg:mb-2 group-hover:text-yellow-600 transition-colors line-clamp-2 h-[2.8em] flex items-start overflow-hidden">
+                        <a href="<?php echo e(route('tour.show', $package)); ?>" class="block"><?php echo e($package->title); ?></a>
+                    </h4>
+
+                    
+                    <div class="hidden lg:block">
+                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($package->description): ?>
+                        <p class="text-gray-500 text-xs mb-4 line-clamp-2"><?php echo e($package->description); ?></p>
+                        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                    </div>
+
+                    <div class="flex items-end justify-between pt-2 lg:pt-3 border-t border-gray-100 mt-auto">
+                        <div class="flex flex-col">
+                            <?php
+                                $allPrices = collect([$package->price_2_4, $package->price_5_7, $package->price_8_14])->filter(fn($price) => $price > 0);
+                                $lowestPrice = $allPrices->min();
+                            ?>
+
+                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($lowestPrice): ?>
+                            <span class="text-[8px] lg:text-[10px] text-gray-400 uppercase font-semibold mb-0.5">Starts From</span>
+                            <p class="text-[11px] lg:text-base font-bold text-yellow-700 leading-none">Rp <?php echo e(number_format($lowestPrice, 0, ',', '.')); ?></p>
+                            <?php else: ?>
+                            <p class="text-[9px] lg:text-sm text-gray-400 italic">Get in Touch</p>
+                            <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                        </div>
+                        <a href="<?php echo e(route('tour.show', $package)); ?>" class="inline-flex items-center bg-yellow-600 hover:bg-yellow-700 text-white text-[9px] lg:text-xs font-semibold px-2 py-1 lg:px-3 lg:py-1.5 rounded lg:rounded-lg transition-colors shadow-sm">Details</a>
+                    </div>
+                </div>
+            </article>
+            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
 
         </div>
     </div>
 </section>
-
 
 
 
@@ -202,7 +281,7 @@
                                 <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                             </div>
                         </div>
-                        <a href="<?php echo e(route('tour.show', $package)); ?>" class="inline-flex items-center bg-yellow-600 hover:bg-yellow-700 text-white text-[10px] md:text-sm font-semibold px-2 py-1 md:px-4 md:py-2 rounded-lg md:rounded-xl transition-colors">Details</a>
+                        <a href="<?php echo e(route('tour.show', $package)); ?>" class="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white text-[10px] md:text-sm font-semibold px-2 py-1 md:px-4 md:py-2 rounded-lg md:rounded-xl transition-colors">Details</a>
                     </div>
                 </div>
             </article>
@@ -233,10 +312,10 @@
         </div>
 
         <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($allPackages->isNotEmpty()): ?>
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6 items-stretch">
                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $allPackages->take(4); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $package): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoop($loop->index); ?><?php endif; ?>
-                    <article class="group overflow-hidden rounded-2xl bg-gray-50 shadow-sm border border-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
-                        <div class="relative overflow-hidden h-56">
+                    <article class="group flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-sm border border-gray-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+                        <div class="relative aspect-[4/3] shrink-0 overflow-hidden bg-gray-100">
                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($package->thumbnail): ?>
                                 <img src="<?php echo e($package->thumbnail_url); ?>" alt="<?php echo e($package->title); ?>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                             <?php elseif($package->images->isNotEmpty()): ?>
@@ -256,7 +335,7 @@
                             <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                         </div>
 
-                        <div class="p-5 flex flex-col h-[220px]">
+                        <div class="flex flex-1 flex-col p-4 md:p-5">
                             <div class="flex items-center justify-between gap-2 mb-2">
                                 <span class="inline-flex items-center rounded-full bg-yellow-100 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-yellow-700">
                                     <?php echo e($package->category?->name ?? 'Activity'); ?>
@@ -270,7 +349,7 @@
                                 <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                             </div>
 
-                            <h3 class="text-xl font-extrabold text-gray-900 leading-snug mb-2 line-clamp-2">
+                            <h3 class="min-h-[3.5rem] text-lg md:text-xl font-extrabold text-gray-900 leading-snug mb-2 line-clamp-2">
                                 <a href="<?php echo e(route('tour.show', $package)); ?>" class="hover:text-yellow-600 transition-colors"><?php echo e($package->title); ?></a>
                             </h3>
 
@@ -282,7 +361,7 @@
                                 </p>
                             <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
-                            <p class="text-sm text-gray-600 line-clamp-3 mb-4">
+                            <p class="min-h-[4.5rem] text-sm text-gray-600 line-clamp-3 mb-4">
                                 <?php echo e($package->description ?? 'Explore a memorable Bali experience with local guidance and unforgettable moments.'); ?>
 
                             </p>
@@ -295,7 +374,7 @@
 
                                     </p>
                                 </div>
-                                <a href="<?php echo e(route('tour.show', $package)); ?>" class="inline-flex items-center justify-center rounded-xl bg-yellow-600 px-4 py-2 text-sm font-bold text-white transition hover:bg-yellow-700">
+                                <a href="<?php echo e(route('tour.show', $package)); ?>" class="inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-bold text-white transition hover:bg-blue-700">
                                     Details
                                 </a>
                             </div>

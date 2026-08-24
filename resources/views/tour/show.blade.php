@@ -188,15 +188,47 @@
                                 ['label' => '8-14 Pax', 'single' => $tourPackage->price_8_14, 'tandem' => $tourPackage->tandem_price_8_14 ?? $tourPackage->activity_tandem_price],
                             ];
                         @endphp
-                        <div class="mt-5 overflow-x-auto rounded-2xl border border-slate-200 bg-white">
-                            <div class="grid min-w-[660px] grid-cols-3 border-b border-slate-200 bg-slate-50">
+                        <div class="mt-5 overflow-hidden rounded-2xl border border-slate-200 bg-white sm:hidden">
+                            <table class="w-full table-fixed text-left">
+                                <thead class="bg-slate-50">
+                                    <tr class="border-b border-slate-200">
+                                        <th scope="col" class="w-1/4 px-3 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-600 sm:px-4 sm:text-xs">Pax</th>
+                                        <th scope="col" class="w-[37.5%] px-3 py-3 text-[10px] font-bold uppercase tracking-wider text-amber-700 sm:px-4 sm:text-xs">Single</th>
+                                        <th scope="col" class="w-[37.5%] px-3 py-3 text-[10px] font-bold uppercase tracking-wider text-indigo-700 sm:px-4 sm:text-xs">Tandem</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($activityTiers as $tier)
+                                        <tr class="border-b border-slate-100 last:border-b-0">
+                                            <th scope="row" class="px-3 py-4 text-sm font-bold text-slate-900 sm:px-4 sm:text-base">{{ $tier['label'] }}</th>
+                                            <td class="px-3 py-4 sm:px-4">
+                                                @if($tier['single'])
+                                                    <span class="pricing-display text-sm font-black text-[#0A2240] sm:text-lg">Rp {{ number_format($tier['single'], 0, ',', '.') }}</span>
+                                                @else
+                                                    <span class="text-xs italic text-slate-400 sm:text-sm">Contact us</span>
+                                                @endif
+                                            </td>
+                                            <td class="px-3 py-4 sm:px-4">
+                                                @if($tier['tandem'])
+                                                    <span class="pricing-display text-sm font-black text-[#0A2240] sm:text-lg">Rp {{ number_format($tier['tandem'], 0, ',', '.') }}</span>
+                                                @else
+                                                    <span class="text-xs italic text-slate-400 sm:text-sm">Contact us</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="mt-5 hidden overflow-hidden rounded-2xl border border-slate-200 bg-white sm:block">
+                            <div class="grid grid-cols-3 border-b border-slate-200 bg-slate-50">
                                 @foreach($activityTiers as $tier)
                                     <div class="border-r border-slate-200 p-4 last:border-r-0">
                                         <h3 class="font-bold tracking-tight text-slate-900">{{ $tier['label'] }}</h3>
                                     </div>
                                 @endforeach
                             </div>
-                            <div class="grid min-w-[660px] grid-cols-3">
+                            <div class="grid grid-cols-3">
                                 @foreach($activityTiers as $tier)
                                     <div class="border-r border-slate-200 p-4 last:border-r-0">
                                         <p class="text-[10px] font-bold uppercase tracking-wider text-amber-700">Single / person</p>

@@ -350,7 +350,7 @@
             </div>
 
             {{-- Ringkasan Pesanan Kanan --}}
-            <div class="lg:col-span-1 lg:w-[calc(100%+2rem)]">
+            <div class="lg:col-span-1 lg:w-[calc(100%+3.5rem)]">
                 <div class="bg-white rounded-2xl shadow-sm p-6 sticky top-24">
                     <h3 class="font-bold text-gray-800 mb-4">Order Summary</h3>
 

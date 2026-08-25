@@ -12,6 +12,12 @@ class TourPackage extends Model
 
     protected static function booted(): void
     {
+        static::saving(function (TourPackage $tourPackage): void {
+            if (blank($tourPackage->price_1_pax) && filled($tourPackage->price_2_4)) {
+                $tourPackage->price_1_pax = (float) $tourPackage->price_2_4 + 300000;
+            }
+        });
+
         static::creating(function (TourPackage $tourPackage): void {
             if (filled($tourPackage->tour_category_id)) {
                 return;
@@ -46,6 +52,7 @@ class TourPackage extends Model
         'includes',
         'excludes',
         'thumbnail',
+        'price_1_pax',
         'price_2_4',
         'price_5_7',
         'price_8_14',
@@ -73,6 +80,7 @@ class TourPackage extends Model
         'price_2_4'        => 'decimal:2',
         'price_5_7'        => 'decimal:2',
         'price_8_14'       => 'decimal:2',
+        'price_1_pax'      => 'decimal:2',
         'activity_single_price' => 'decimal:2',
         'activity_tandem_price' => 'decimal:2',
         'tandem_price_2_4' => 'decimal:2',

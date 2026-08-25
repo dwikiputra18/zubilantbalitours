@@ -27,7 +27,7 @@ class CheckoutController extends Controller
             'country_code' => 'required|string|max:10',
             'phone' => 'required|string|max:20',
             'travel_date' => 'required|date|after_or_equal:today',
-            'quantity' => $tourPackage->is_activity ? 'required|integer|min:0' : 'required|integer|min:2',
+            'quantity' => 'required|integer|min:1',
             'single_quantity' => $tourPackage->is_activity ? 'required|integer|min:0' : 'nullable',
             'tandem_quantity' => $tourPackage->is_activity ? 'required|integer|min:0' : 'nullable',
             'pricing_option' => $tourPackage->is_activity ? 'required|in:single,tandem,mixed' : 'nullable',
@@ -49,13 +49,13 @@ class CheckoutController extends Controller
             $tandemQuantity = (int) $request->tandem_quantity;
             $quantity = $singleQuantity + ($tandemQuantity * 2);
 
-            if ($quantity < 2) {
-                return back()->withErrors(['quantity' => 'The minimum booking is for 2 participants (2 pax).'])->withInput();
-            }
         }
 
         if ($tourPackage->is_activity) {
-            if ($quantity <= 4) {
+            if ($quantity === 1) {
+                $singlePrice = $tourPackage->price_1_pax ?? ($tourPackage->price_2_4 !== null ? $tourPackage->price_2_4 + 300000 : $tourPackage->price);
+                $tandemPrice = $tourPackage->tandem_price_2_4 ?? $tourPackage->activity_tandem_price;
+            } elseif ($quantity <= 4) {
                 $singlePrice = $tourPackage->price_2_4;
                 $tandemPrice = $tourPackage->tandem_price_2_4 ?? $tourPackage->activity_tandem_price;
             } elseif ($quantity <= 7) {
@@ -68,6 +68,10 @@ class CheckoutController extends Controller
             $baseAmount = (int) (($singleQuantity * $singlePrice) + ($tandemQuantity * 2 * $tandemPrice));
             $price = $baseAmount;
             $billableQuantity = 1;
+        } elseif ($quantity === 1) {
+            $price = $tourPackage->price_1_pax ?? ($tourPackage->price_2_4 !== null ? $tourPackage->price_2_4 + 300000 : $tourPackage->price);
+            $billableQuantity = 1;
+            $baseAmount = (int) $price;
         } elseif ($quantity <= 4) {
             $price = $tourPackage->price_2_4;
             $billableQuantity = $quantity;

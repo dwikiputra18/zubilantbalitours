@@ -58,6 +58,11 @@ class TourPackageForm
                     ->numeric()
                     ->prefix('Rp')
                     ->label('Base Price'),
+                TextInput::make('price_1_pax')
+                    ->numeric()
+                    ->prefix('Rp')
+                    ->label('Price (1 Pax)')
+                    ->helperText('Harga 1 pax, biasanya harga 2-4 pax + Rp300.000.'),
                 TextInput::make('price_2_4')
                     ->numeric()
                     ->prefix('Rp')

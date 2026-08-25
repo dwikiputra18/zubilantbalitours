@@ -33,6 +33,7 @@ class TourPackageExporter extends Exporter
             ExportColumn::make('includes')->label('includes'),
             ExportColumn::make('excludes')->label('excludes'),
             ExportColumn::make('thumbnail')->label('thumbnail'),
+            ExportColumn::make('price_1_pax')->label('price_1_pax'),
             ExportColumn::make('price_2_4')->label('price_2_4'),
             ExportColumn::make('price_5_7')->label('price_5_7'),
             ExportColumn::make('price_8_14')->label('price_8_14'),

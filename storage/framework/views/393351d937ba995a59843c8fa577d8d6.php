@@ -153,12 +153,13 @@
                     <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                 </div>
 
-                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($tourPackage->is_activity && ($tourPackage->price_2_4 || $tourPackage->price_5_7 || $tourPackage->price_8_14 || $tourPackage->tandem_price_2_4 || $tourPackage->tandem_price_5_7 || $tourPackage->tandem_price_8_14 || $tourPackage->activity_tandem_price)): ?>
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($tourPackage->price_1_pax || $tourPackage->price_2_4 || $tourPackage->price_5_7 || $tourPackage->price_8_14 || ($tourPackage->is_activity && ($tourPackage->tandem_price_2_4 || $tourPackage->tandem_price_5_7 || $tourPackage->tandem_price_8_14 || $tourPackage->activity_tandem_price))): ?>
                     <div class="activities-pricing rounded-3xl border border-yellow-200 bg-gradient-to-br from-[#fffaf0] via-white to-slate-50 p-6 shadow-md md:p-8">
                         <div class="mb-5">
-                            <h2 class="text-xl font-extrabold tracking-tight text-slate-900 md:text-2xl">Activities Pricing</h2>
-                            <p class="mt-1 text-sm text-slate-600">Prices are based on total participants. Tandem is charged per participant.</p>
+                            <h2 class="text-xl font-extrabold tracking-tight text-slate-900 md:text-2xl"><?php echo e($tourPackage->is_activity ? 'Activities Pricing' : 'Tour Pricing'); ?></h2>
+                            <p class="mt-1 text-sm text-slate-600">Prices are based on total participants.</p>
                         </div>
+                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($tourPackage->is_activity): ?>
                         <div class="grid gap-4 sm:grid-cols-2">
                             <div class="rounded-2xl border border-amber-200 bg-amber-50/70 p-5 shadow-sm">
                                 <div class="flex items-center gap-3">
@@ -183,8 +184,10 @@
                                 </div>
                             </div>
                         </div>
+                        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                         <?php
-                            $activityTiers = [
+                            $pricingTiers = [
+                                ['label' => '1 Pax', 'single' => $tourPackage->price_1_pax ?? ($tourPackage->price_2_4 !== null ? $tourPackage->price_2_4 + 300000 : $tourPackage->price), 'tandem' => null],
                                 ['label' => '2-4 Pax', 'single' => $tourPackage->price_2_4, 'tandem' => $tourPackage->tandem_price_2_4 ?? $tourPackage->activity_tandem_price],
                                 ['label' => '5-7 Pax', 'single' => $tourPackage->price_5_7, 'tandem' => $tourPackage->tandem_price_5_7 ?? $tourPackage->activity_tandem_price],
                                 ['label' => '8-14 Pax', 'single' => $tourPackage->price_8_14, 'tandem' => $tourPackage->tandem_price_8_14 ?? $tourPackage->activity_tandem_price],
@@ -194,13 +197,13 @@
                             <table class="w-full table-fixed text-left">
                                 <thead class="bg-slate-50">
                                     <tr class="border-b border-slate-200">
-                                        <th scope="col" class="w-1/4 px-3 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-600 sm:px-4 sm:text-xs">Pax</th>
-                                        <th scope="col" class="w-[37.5%] px-3 py-3 text-[10px] font-bold uppercase tracking-wider text-amber-700 sm:px-4 sm:text-xs">Single</th>
-                                        <th scope="col" class="w-[37.5%] px-3 py-3 text-[10px] font-bold uppercase tracking-wider text-indigo-700 sm:px-4 sm:text-xs">Tandem</th>
+                                        <th scope="col" class="<?php echo e($tourPackage->is_activity ? 'w-1/4' : 'w-1/2'); ?> px-3 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-600 sm:px-4 sm:text-xs">Pax</th>
+                                        <th scope="col" class="<?php echo e($tourPackage->is_activity ? 'w-[37.5%]' : 'w-1/2'); ?> px-3 py-3 text-[10px] font-bold uppercase tracking-wider text-amber-700 sm:px-4 sm:text-xs"><?php echo e($tourPackage->is_activity ? 'Single' : 'Price / person'); ?></th>
+                                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($tourPackage->is_activity): ?><th scope="col" class="w-[37.5%] px-3 py-3 text-[10px] font-bold uppercase tracking-wider text-indigo-700 sm:px-4 sm:text-xs">Tandem</th><?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $activityTiers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tier): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoop($loop->index); ?><?php endif; ?>
+                                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $pricingTiers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tier): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoop($loop->index); ?><?php endif; ?>
                                         <tr class="border-b border-slate-100 last:border-b-0">
                                             <th scope="row" class="px-3 py-4 text-sm font-bold text-slate-900 sm:px-4 sm:text-base"><?php echo e($tier['label']); ?></th>
                                             <td class="px-3 py-4 sm:px-4">
@@ -210,6 +213,7 @@
                                                     <span class="text-xs italic text-slate-400 sm:text-sm">Contact us</span>
                                                 <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                                             </td>
+                                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($tourPackage->is_activity): ?>
                                             <td class="px-3 py-4 sm:px-4">
                                                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($tier['tandem']): ?>
                                                     <span class="pricing-display text-sm font-black text-[#0A2240] sm:text-lg">Rp <?php echo e(number_format($tier['tandem'], 0, ',', '.')); ?></span>
@@ -217,39 +221,42 @@
                                                     <span class="text-xs italic text-slate-400 sm:text-sm">Contact us</span>
                                                 <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                                             </td>
+                                            <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                                         </tr>
                                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                                 </tbody>
                             </table>
                         </div>
                         <div class="mt-5 hidden overflow-hidden rounded-2xl border border-slate-200 bg-white sm:block">
-                            <div class="grid grid-cols-3 border-b border-slate-200 bg-slate-50">
-                                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $activityTiers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tier): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoop($loop->index); ?><?php endif; ?>
+                            <div class="grid grid-cols-4 border-b border-slate-200 bg-slate-50">
+                                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $pricingTiers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tier): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoop($loop->index); ?><?php endif; ?>
                                     <div class="border-r border-slate-200 p-4 last:border-r-0">
                                         <h3 class="font-bold tracking-tight text-slate-900"><?php echo e($tier['label']); ?></h3>
                                     </div>
                                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                             </div>
-                            <div class="grid grid-cols-3">
-                                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $activityTiers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tier): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoop($loop->index); ?><?php endif; ?>
+                            <div class="grid grid-cols-4">
+                                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $pricingTiers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $tier): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoop($loop->index); ?><?php endif; ?>
                                     <div class="border-r border-slate-200 p-4 last:border-r-0">
-                                        <p class="text-[10px] font-bold uppercase tracking-wider text-amber-700">Single / person</p>
+                                        <p class="text-[10px] font-bold uppercase tracking-wider text-amber-700"><?php echo e($tourPackage->is_activity ? 'Single / person' : 'Price / person'); ?></p>
                                         <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($tier['single']): ?>
                                             <p class="pricing-display mt-2 text-xl font-black text-[#0A2240]">Rp <?php echo e(number_format($tier['single'], 0, ',', '.')); ?></p>
                                         <?php else: ?>
                                             <p class="mt-2 text-sm italic text-slate-400">Contact us</p>
                                         <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-                                        <p class="mt-4 text-[10px] font-bold uppercase tracking-wider text-indigo-700">Tandem / person</p>
-                                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($tier['tandem']): ?>
-                                            <p class="pricing-display mt-2 text-xl font-black text-[#0A2240]">Rp <?php echo e(number_format($tier['tandem'], 0, ',', '.')); ?></p>
-                                        <?php else: ?>
-                                            <p class="mt-2 text-sm italic text-slate-400">Contact us</p>
+                                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($tourPackage->is_activity): ?>
+                                            <p class="mt-4 text-[10px] font-bold uppercase tracking-wider text-indigo-700">Tandem / person</p>
+                                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($tier['tandem']): ?>
+                                                <p class="pricing-display mt-2 text-xl font-black text-[#0A2240]">Rp <?php echo e(number_format($tier['tandem'], 0, ',', '.')); ?></p>
+                                            <?php else: ?>
+                                                <p class="mt-2 text-sm italic text-slate-400">Contact us</p>
+                                            <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                                         <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                                     </div>
                                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                             </div>
                         </div>
-                        <p class="mt-4 text-xs font-medium text-slate-500">Minimum booking: 2 pax. Each tandem unit carries 2 participants.</p>
+                        <p class="mt-4 text-xs font-medium text-slate-500">Minimum booking: 1 pax<?php echo e($tourPackage->is_activity ? '. Each tandem unit carries 2 participants.' : '.'); ?></p>
                     </div>
                 <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
@@ -361,7 +368,7 @@
                     </div>
 
                     <?php
-                        $priceList = collect([$tourPackage->price_2_4, $tourPackage->price_5_7, $tourPackage->price_8_14])->filter(fn($p) => $p > 0);
+                        $priceList = collect([$tourPackage->price_1_pax ?? ($tourPackage->price_2_4 !== null ? $tourPackage->price_2_4 + 300000 : $tourPackage->price), $tourPackage->price_2_4, $tourPackage->price_5_7, $tourPackage->price_8_14])->filter(fn($p) => $p > 0);
                         $lowestPrice = $priceList->min();
                     ?>
 

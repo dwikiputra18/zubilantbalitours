@@ -147,6 +147,11 @@ class TourPackageResource extends Resource
                     Section::make('Tiered Pricing (Pricelist)')
                         ->description('Harga berdasarkan jumlah peserta.')
                         ->schema([
+                            TextInput::make('price_1_pax')
+                                ->label('Price (1 Pax)')
+                                ->numeric()
+                                ->prefix('Rp')
+                                ->nullable(),
                             TextInput::make('price_2_4')
                                 ->label('Price (2-4 Pax)')
                                 ->numeric()

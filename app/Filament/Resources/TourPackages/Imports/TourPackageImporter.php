@@ -35,6 +35,7 @@ class TourPackageImporter extends Importer
             ImportColumn::make('includes'),
             ImportColumn::make('excludes'),
             ImportColumn::make('thumbnail'),
+            ImportColumn::make('price_1_pax')->numeric(),
             ImportColumn::make('price_2_4')->numeric(),
             ImportColumn::make('price_5_7')->numeric(),
             ImportColumn::make('price_8_14')->numeric(),

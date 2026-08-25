@@ -17,11 +17,11 @@
         </div>
         @endif
 
-        {{-- Mengubah quantity awal menjadi 2 di x-data --}}
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8" x-data="tourBooking({
             isActivity: {{ $tourPackage->is_activity ? 'true' : 'false' }},
             activitySinglePrice: {{ $tourPackage->activity_single_price ?? 0 }},
             activityTandemPrice: {{ $tourPackage->activity_tandem_price ?? 0 }},
+            price_1_pax: {{ $tourPackage->price_1_pax ?? (($tourPackage->price_2_4 ?? 0) + 300000) }},
             price_2_4: {{ $tourPackage->price_2_4 ?? 0 }},
             price_5_7: {{ $tourPackage->price_5_7 ?? 0 }},
             price_8_14: {{ $tourPackage->price_8_14 ?? 0 }},
@@ -232,7 +232,7 @@
                                 <div>
                                     <p class="font-bold text-gray-800">Single Ride</p>
                                     <p class="text-xs text-gray-500">1 participant</p>
-                                    <p class="mt-1 text-sm font-semibold text-[#C68A36]">Group pricing applies</p>
+                                    <p class="mt-1 text-sm font-semibold text-[#C68A36]">Single-person pricing applies</p>
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <button type="button" @click="changeUnits('single', -1)" class="h-9 w-9 rounded-lg border border-gray-300 text-lg font-bold text-gray-700 hover:bg-gray-100">−</button>
@@ -262,7 +262,7 @@
                             <span class="text-lg font-black text-gray-900" x-text="totalPax + ' pax'"></span>
                         </div>
                         <div x-show="belowMinimum" x-cloak class="mt-3 rounded-xl bg-amber-50 p-3 text-sm font-medium text-amber-800">
-                            ⚠️ The minimum booking is for 2 participants (2 pax).
+                            ⚠️ Please select at least 1 participant.
                         </div>
                         @error('single_quantity')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                         @error('tandem_quantity')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
@@ -402,7 +402,7 @@
 </div>
 
 <script>
-    function tourBooking({ isActivity, activitySinglePrice, activityTandemPrice, price_2_4, price_5_7, price_8_14, tandem_price_2_4, tandem_price_5_7, tandem_price_8_14, basePrice }) {
+    function tourBooking({ isActivity, activitySinglePrice, activityTandemPrice, price_1_pax, price_2_4, price_5_7, price_8_14, tandem_price_2_4, tandem_price_5_7, tandem_price_8_14, basePrice }) {
         return {
             isActivity,
             activitySinglePrice,
@@ -412,16 +412,18 @@
                 email: '',
                 country_code: '+62',
                 phone: '',
-                quantity: isActivity ? 0 : 2,
-                single_quantity: 0,
-                tandem_quantity: isActivity ? 1 : 0,
-                pricing_option: isActivity ? 'tandem' : null,
+                quantity: isActivity ? 1 : 1,
+                single_quantity: isActivity ? 1 : 0,
+                tandem_quantity: 0,
+                pricing_option: isActivity ? 'single' : null,
                 date: '',
                 pickup_point: '',
                 latitude: '',
                 longitude: ''
             },
             locationLoading: false,
+            minimumQuantity: 1,
+            price_1_pax,
             price_2_4,
             price_5_7,
             price_8_14,
@@ -429,7 +431,7 @@
             tandem_price_5_7,
             tandem_price_8_14,
             pricePerPerson: isActivity ? activityTandemPrice : (price_2_4 || basePrice),
-            totalPrice: isActivity ? (price_2_4 || basePrice) * 2 : (price_2_4 || basePrice) * 2,
+            totalPrice: isActivity ? price_1_pax : price_1_pax,
             singleRate: 0,
             tandemRate: 0,
             singleTotal: 0,
@@ -442,11 +444,11 @@
             },
 
             get belowMinimum() {
-                return this.totalPax < 2;
+                return this.totalPax < 1;
             },
 
             get quantityHint() {
-                return '* Minimum 2 pax required';
+                return '* Minimum 1 pax required';
             },
 
             init() {
@@ -459,7 +461,7 @@
                 this.updatePrice();
             },
             decrement() {
-                if (this.form.quantity > 2) {
+                if (this.form.quantity > 1) {
                     this.form.quantity -= 1;
                     this.updatePrice();
                 }
@@ -477,7 +479,7 @@
                     this.form.quantity = this.totalPax;
                     this.form.pricing_option = single > 0 && tandem > 0 ? 'mixed' : (single > 0 ? 'single' : 'tandem');
                     const q = this.totalPax;
-                    const tier = q >= 8 ? '8_14' : (q >= 5 ? '5_7' : '2_4');
+                    const tier = q === 1 ? '1_pax' : (q >= 8 ? '8_14' : (q >= 5 ? '5_7' : '2_4'));
                     const singleRate = this['price_' + tier] || 0;
                     const tandemRate = this['tandem_price_' + tier] || 0;
                     this.singleRate = singleRate;
@@ -490,7 +492,9 @@
                     return;
                 }
                 const q = this.form.quantity;
-                if (q >= 2 && q <= 4) {
+                if (q === 1) {
+                    this.pricePerPerson = this.price_1_pax;
+                } else if (q <= 4) {
                     this.pricePerPerson = this.price_2_4;
                 } else if (q >= 5 && q <= 7) {
                     this.pricePerPerson = this.price_5_7;

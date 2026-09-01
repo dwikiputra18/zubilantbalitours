@@ -70,8 +70,8 @@
             <span class="block text-xs uppercase tracking-wider text-gray-400 mb-1">
                 Phone
             </span>
-            <a href="tel:+6282323777479" class="text-gray-300 text-sm hover:text-orange-400 transition-colors">
-                +62 82323777479
+            <a href="tel:+6281266718008" class="text-gray-300 text-sm hover:text-orange-400 transition-colors">
+                +6281266718008
             </a>
         </div>
     </div>

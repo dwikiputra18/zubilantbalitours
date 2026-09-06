@@ -3,8 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-    <title><?php echo $__env->yieldContent('title', 'Zubilant Bali Tours - Your Best Travel Partner'); ?></title>
+
+    
+    
+    
+    <?php
+        // $__env->yieldContent() adalah cara yang benar untuk membaca @section value
+        // di dalam blok PHP pada layout Blade.
+        $ogTitle       = trim($__env->yieldContent('og_title',       'Zubilant Bali Tours - Your Best Travel Partner'));
+        $ogDescription = trim($__env->yieldContent('og_description', 'Discover the best Bali tours and activities with Zubilant Bali Tours. Book your adventure today!'));
+        $ogImage       = trim($__env->yieldContent('og_image',        url('logo.png')));
+        $ogUrl         = trim($__env->yieldContent('og_url',          url()->current()));
+        $ogType        = trim($__env->yieldContent('og_type',         'website'));
+
+        // Fallback jika section kosong setelah trim
+        if (blank($ogTitle))       { $ogTitle       = 'Zubilant Bali Tours - Your Best Travel Partner'; }
+        if (blank($ogDescription)) { $ogDescription = 'Discover the best Bali tours and activities with Zubilant Bali Tours. Book your adventure today!'; }
+        if (blank($ogImage))       { $ogImage       = url('logo.png'); }
+        if (blank($ogUrl))         { $ogUrl         = url()->current(); }
+        if (blank($ogType))        { $ogType        = 'website'; }
+    ?>
+
+    <title><?php echo e($ogTitle); ?></title>
+    <meta name="description" content="<?php echo e($ogDescription); ?>">
+    <link rel="canonical" href="<?php echo e($ogUrl); ?>">
+
+    
+    <meta property="og:type"        content="<?php echo e($ogType); ?>">
+    <meta property="og:site_name"   content="Zubilant Bali Tours">
+    <meta property="og:title"       content="<?php echo e($ogTitle); ?>">
+    <meta property="og:description" content="<?php echo e($ogDescription); ?>">
+    <meta property="og:url"         content="<?php echo e($ogUrl); ?>">
+    <meta property="og:image"       content="<?php echo e($ogImage); ?>">
+    <meta property="og:image:width"  content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale"      content="id_ID">
+
+    
+    <meta name="twitter:card"        content="summary_large_image">
+    <meta name="twitter:title"       content="<?php echo e($ogTitle); ?>">
+    <meta name="twitter:description" content="<?php echo e($ogDescription); ?>">
+    <meta name="twitter:image"       content="<?php echo e($ogImage); ?>">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Swiper CSS for Hero Slider -->

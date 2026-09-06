@@ -19,6 +19,7 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8" x-data="tourBooking({
             isActivity: {{ $tourPackage->is_activity ? 'true' : 'false' }},
+            minimumQuantity: {{ $tourPackage->minimum_booking_quantity }},
             activitySinglePrice: {{ $tourPackage->activity_single_price ?? 0 }},
             activityTandemPrice: {{ $tourPackage->activity_tandem_price ?? 0 }},
             price_1_pax: {{ $tourPackage->price_1_pax ?? (($tourPackage->price_2_4 ?? 0) + 300000) }},
@@ -262,7 +263,7 @@
                             <span class="text-lg font-black text-gray-900" x-text="totalPax + ' pax'"></span>
                         </div>
                         <div x-show="belowMinimum" x-cloak class="mt-3 rounded-xl bg-amber-50 p-3 text-sm font-medium text-amber-800">
-                            ⚠️ Please select at least 1 participant.
+                            ⚠️ Please select at least <span x-text="minimumQuantity"></span> participants.
                         </div>
                         @error('single_quantity')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                         @error('tandem_quantity')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
@@ -402,7 +403,7 @@
 </div>
 
 <script>
-    function tourBooking({ isActivity, activitySinglePrice, activityTandemPrice, price_1_pax, price_2_4, price_5_7, price_8_14, tandem_price_2_4, tandem_price_5_7, tandem_price_8_14, basePrice }) {
+    function tourBooking({ isActivity, minimumQuantity, activitySinglePrice, activityTandemPrice, price_1_pax, price_2_4, price_5_7, price_8_14, tandem_price_2_4, tandem_price_5_7, tandem_price_8_14, basePrice }) {
         return {
             isActivity,
             activitySinglePrice,
@@ -412,8 +413,8 @@
                 email: '',
                 country_code: '+62',
                 phone: '',
-                quantity: isActivity ? 1 : 1,
-                single_quantity: isActivity ? 1 : 0,
+                quantity: minimumQuantity,
+                single_quantity: isActivity ? minimumQuantity : 0,
                 tandem_quantity: 0,
                 pricing_option: isActivity ? 'single' : null,
                 date: '',
@@ -422,7 +423,7 @@
                 longitude: ''
             },
             locationLoading: false,
-            minimumQuantity: 1,
+            minimumQuantity,
             price_1_pax,
             price_2_4,
             price_5_7,
@@ -444,11 +445,11 @@
             },
 
             get belowMinimum() {
-                return this.totalPax < 1;
+                return this.totalPax < this.minimumQuantity;
             },
 
             get quantityHint() {
-                return '* Minimum 1 pax required';
+                return `* Minimum ${this.minimumQuantity} pax required`;
             },
 
             init() {
@@ -461,14 +462,24 @@
                 this.updatePrice();
             },
             decrement() {
-                if (this.form.quantity > 1) {
+                if (this.form.quantity > this.minimumQuantity) {
                     this.form.quantity -= 1;
                     this.updatePrice();
                 }
             },
 
             changeUnits(type, amount) {
-                this.form[type + '_quantity'] = Math.max(0, this.form[type + '_quantity'] + amount);
+                const field = type + '_quantity';
+                const nextValue = Math.max(0, this.form[field] + amount);
+                const nextTotalPax = type === 'single'
+                    ? nextValue + (this.form.tandem_quantity * 2)
+                    : this.form.single_quantity + (nextValue * 2);
+
+                if (nextTotalPax < this.minimumQuantity) {
+                    return;
+                }
+
+                this.form[field] = nextValue;
                 this.updatePrice();
             },
 

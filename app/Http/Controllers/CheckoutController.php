@@ -51,6 +51,14 @@ class CheckoutController extends Controller
 
         }
 
+        if ($quantity < $tourPackage->minimum_booking_quantity) {
+            return back()
+                ->withInput()
+                ->withErrors([
+                    'quantity' => "This package requires a minimum of {$tourPackage->minimum_booking_quantity} pax.",
+                ]);
+        }
+
         if ($tourPackage->is_activity) {
             if ($quantity === 1) {
                 $singlePrice = $tourPackage->price_1_pax ?? ($tourPackage->price_2_4 !== null ? $tourPackage->price_2_4 + 300000 : $tourPackage->price);

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class TourPackage extends Model
 {
@@ -97,6 +98,21 @@ class TourPackage extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(TourCategory::class, 'tour_category_id');
+    }
+
+    public function getMinimumBookingQuantityAttribute(): int
+    {
+        $category = Str::lower(($this->category?->slug ?? '') . ' ' . ($this->category?->name ?? ''));
+
+        if (Str::contains($category, 'honeymoon')) {
+            return 2;
+        }
+
+        if (Str::contains($category, ['family-package', 'family package', 'family'])) {
+            return 3;
+        }
+
+        return 1;
     }
 
     public function images(): HasMany

@@ -53,6 +53,41 @@ class TourPackageController extends Controller
             ->take(3)
             ->get();
 
-        return view('tour.show', compact('tourPackage', 'related'));
+        // ── Open Graph Meta Data ──────────────────────────────────────────────
+        $ogTitle = $tourPackage->title . ' — Zubilant Bali Tours';
+
+        // Bersihkan HTML tag, normalisasi whitespace, lalu potong maks 160 karakter
+        $rawDesc    = strip_tags($tourPackage->description ?? '');
+        $rawDesc    = preg_replace('/\s+/', ' ', $rawDesc);
+        $ogDescription = mb_strlen($rawDesc) > 160
+            ? mb_substr($rawDesc, 0, 157) . '...'
+            : $rawDesc;
+
+        if (blank($ogDescription)) {
+            $ogDescription = 'Temukan paket wisata terbaik di Bali bersama Zubilant Bali Tours. Pesan sekarang!';
+        }
+
+        // Resolve absolute image URL (thumbnail > gallery image > fallback logo)
+        $ogImage = null;
+        if (filled($tourPackage->thumbnail_url)) {
+            $ogImage = $tourPackage->thumbnail_url;
+        } elseif ($tourPackage->images->isNotEmpty()) {
+            $ogImage = $tourPackage->images->first()->image_url;
+        }
+
+        // Pastikan URL absolut dengan HTTPS
+        if (filled($ogImage) && ! preg_match('#^https?://#i', $ogImage)) {
+            $ogImage = config('app.url') . '/' . ltrim($ogImage, '/');
+        }
+        if (blank($ogImage)) {
+            // Fallback ke gambar default — logo/banner website
+            $ogImage = url('logo.png');
+        }
+        // Paksa HTTPS pada image URL agar WhatsApp dan platform sosial dapat memuat gambar
+        $ogImage = preg_replace('#^http://#i', 'https://', $ogImage);
+
+        $ogUrl = route('tour.show', $tourPackage->slug);
+
+        return view('tour.show', compact('tourPackage', 'related', 'ogTitle', 'ogDescription', 'ogImage', 'ogUrl'));
     }
 }

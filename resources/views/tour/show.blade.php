@@ -1,6 +1,11 @@
 @extends('layouts.front')
 
-@section('title', $tourPackage->title . ' — Zubilant Bali Tours')
+{{-- ── Open Graph / SEO sections — populated from controller variables ── --}}
+@section('og_title',       $ogTitle)
+@section('og_description', $ogDescription)
+@section('og_image',       $ogImage)
+@section('og_url',         $ogUrl)
+@section('og_type',        'article')
 
 @push('styles')
 <style>
@@ -184,12 +189,20 @@
                         </div>
                         @endif
                         @php
-                            $pricingTiers = [
+                            $minimumBookingQuantity = $tourPackage->minimum_booking_quantity;
+                            $pricingTiers = $minimumBookingQuantity > 1 ? [
+                                ['label' => $minimumBookingQuantity . '-4 Pax', 'single' => $tourPackage->price_2_4, 'tandem' => $tourPackage->tandem_price_2_4 ?? $tourPackage->activity_tandem_price],
+                            ] : [
                                 ['label' => '1 Pax', 'single' => $tourPackage->price_1_pax ?? ($tourPackage->price_2_4 !== null ? $tourPackage->price_2_4 + 300000 : $tourPackage->price), 'tandem' => null],
-                                ['label' => '2-4 Pax', 'single' => $tourPackage->price_2_4, 'tandem' => $tourPackage->tandem_price_2_4 ?? $tourPackage->activity_tandem_price],
+                            ];
+                            $pricingTiers = array_merge($pricingTiers, [
                                 ['label' => '5-7 Pax', 'single' => $tourPackage->price_5_7, 'tandem' => $tourPackage->tandem_price_5_7 ?? $tourPackage->activity_tandem_price],
                                 ['label' => '8-14 Pax', 'single' => $tourPackage->price_8_14, 'tandem' => $tourPackage->tandem_price_8_14 ?? $tourPackage->activity_tandem_price],
-                            ];
+                            ]);
+                            $pricingTiers = array_values(array_filter(
+                                $pricingTiers,
+                                fn ($tier) => filled($tier['single']) || filled($tier['tandem'])
+                            ));
                         @endphp
                         <div class="mt-5 overflow-hidden rounded-2xl border border-slate-200 bg-white sm:hidden">
                             <table class="w-full table-fixed text-left">
@@ -254,7 +267,7 @@
                                 @endforeach
                             </div>
                         </div>
-                        <p class="mt-4 text-xs font-medium text-slate-500">Minimum booking: 1 pax{{ $tourPackage->is_activity ? '. Each tandem unit carries 2 participants.' : '.' }}</p>
+                        <p class="mt-4 text-xs font-medium text-slate-500">Minimum booking: {{ $minimumBookingQuantity }} pax{{ $tourPackage->is_activity ? '. Each tandem unit carries 2 participants.' : '.' }}</p>
                     </div>
                 @endif
 
@@ -364,7 +377,11 @@
                     </div>
 
                     @php
-                        $priceList = collect([$tourPackage->price_1_pax ?? ($tourPackage->price_2_4 !== null ? $tourPackage->price_2_4 + 300000 : $tourPackage->price), $tourPackage->price_2_4, $tourPackage->price_5_7, $tourPackage->price_8_14])->filter(fn($p) => $p > 0);
+                        $minimumBookingQuantity = $tourPackage->minimum_booking_quantity;
+                        $priceList = collect($minimumBookingQuantity > 1
+                            ? [$tourPackage->price_2_4, $tourPackage->price_5_7, $tourPackage->price_8_14]
+                            : [$tourPackage->price_1_pax ?? ($tourPackage->price_2_4 !== null ? $tourPackage->price_2_4 + 300000 : $tourPackage->price), $tourPackage->price_2_4, $tourPackage->price_5_7, $tourPackage->price_8_14]
+                        )->filter(fn($p) => $p > 0);
                         $lowestPrice = $priceList->min();
                     @endphp
 

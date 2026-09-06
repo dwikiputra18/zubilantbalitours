@@ -195,6 +195,7 @@
                                 ['label' => $minimumBookingQuantity . '-4 Pax', 'single' => $tourPackage->price_2_4, 'tandem' => $tourPackage->tandem_price_2_4 ?? $tourPackage->activity_tandem_price],
                             ] : [
                                 ['label' => '1 Pax', 'single' => $tourPackage->price_1_pax ?? ($tourPackage->price_2_4 !== null ? $tourPackage->price_2_4 + 300000 : $tourPackage->price), 'tandem' => null],
+                                ['label' => '2-4 Pax', 'single' => $tourPackage->price_2_4, 'tandem' => $tourPackage->tandem_price_2_4 ?? $tourPackage->activity_tandem_price],
                             ];
                             $pricingTiers = array_merge($pricingTiers, [
                                 ['label' => '5-7 Pax', 'single' => $tourPackage->price_5_7, 'tandem' => $tourPackage->tandem_price_5_7 ?? $tourPackage->activity_tandem_price],

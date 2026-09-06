@@ -109,7 +109,7 @@ class TourPackage extends Model
         }
 
         if (Str::contains($category, ['family-package', 'family package', 'family'])) {
-            return 3;
+            return 2;
         }
 
         return 1;

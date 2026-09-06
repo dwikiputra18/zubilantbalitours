@@ -22,7 +22,7 @@
             minimumQuantity: {{ $tourPackage->minimum_booking_quantity }},
             activitySinglePrice: {{ $tourPackage->activity_single_price ?? 0 }},
             activityTandemPrice: {{ $tourPackage->activity_tandem_price ?? 0 }},
-            price_1_pax: {{ $tourPackage->is_adventure ? 0 : ($tourPackage->price_1_pax ?? (($tourPackage->price_2_4 ?? 0) + 300000)) }},
+            price_1_pax: {{ $tourPackage->price_1_pax ?? 0 }},
             price_2_4: {{ $tourPackage->price_2_4 ?? 0 }},
             price_5_7: {{ $tourPackage->price_5_7 ?? 0 }},
             price_8_14: {{ $tourPackage->price_8_14 ?? 0 }},
@@ -491,7 +491,9 @@
                     this.form.pricing_option = single > 0 && tandem > 0 ? 'mixed' : (single > 0 ? 'single' : 'tandem');
                     const q = this.totalPax;
                     const tier = q === 1 ? '1_pax' : (q >= 8 ? '8_14' : (q >= 5 ? '5_7' : '2_4'));
-                    const singleRate = this['price_' + tier] || 0;
+                    const singleRate = q === 1
+                        ? (this.price_1_pax || this.activitySinglePrice || this.price_2_4 || 0)
+                        : (this['price_' + tier] || 0);
                     const tandemRate = this['tandem_price_' + tier] || 0;
                     this.singleRate = singleRate;
                     this.tandemRate = tandemRate;

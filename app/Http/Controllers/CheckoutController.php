@@ -61,7 +61,7 @@ class CheckoutController extends Controller
 
         if ($tourPackage->is_activity) {
             if ($quantity === 1) {
-                $singlePrice = $tourPackage->price_1_pax ?? ($tourPackage->price_2_4 !== null ? $tourPackage->price_2_4 + 300000 : $tourPackage->price);
+                $singlePrice = $tourPackage->price_1_pax ?? $tourPackage->activity_single_price ?? $tourPackage->price_2_4 ?? $tourPackage->price;
                 $tandemPrice = $tourPackage->tandem_price_2_4 ?? $tourPackage->activity_tandem_price;
             } elseif ($quantity <= 4) {
                 $singlePrice = $tourPackage->price_2_4;

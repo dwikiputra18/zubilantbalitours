@@ -190,12 +190,17 @@
                         @endif
                         @php
                             $minimumBookingQuantity = $tourPackage->minimum_booking_quantity;
-                            $pricingTiers = $minimumBookingQuantity > 1 ? [
-                                ['label' => $minimumBookingQuantity . '-4 Pax', 'single' => $tourPackage->price_2_4, 'tandem' => $tourPackage->tandem_price_2_4 ?? $tourPackage->activity_tandem_price],
-                            ] : [
-                                ['label' => '1 Pax', 'single' => $tourPackage->price_1_pax ?? ($tourPackage->price_2_4 !== null ? $tourPackage->price_2_4 + 300000 : $tourPackage->price), 'tandem' => null],
-                                ['label' => '2-4 Pax', 'single' => $tourPackage->price_2_4, 'tandem' => $tourPackage->tandem_price_2_4 ?? $tourPackage->activity_tandem_price],
-                            ];
+                            $pricingTiers = [];
+                            if (filled($tourPackage->price_1_pax)) {
+                                $pricingTiers[] = ['label' => '1 Pax', 'single' => $tourPackage->price_1_pax, 'tandem' => null];
+                            }
+                            if (filled($tourPackage->price_2_4) || ($tourPackage->is_activity && filled($tourPackage->tandem_price_2_4 ?? $tourPackage->activity_tandem_price))) {
+                                $pricingTiers[] = [
+                                    'label' => $tourPackage->is_activity ? '2-4 Pax' : ($minimumBookingQuantity > 1 ? $minimumBookingQuantity . '-4 Pax' : '2-4 Pax'),
+                                    'single' => $tourPackage->price_2_4,
+                                    'tandem' => $tourPackage->tandem_price_2_4 ?? $tourPackage->activity_tandem_price,
+                                ];
+                            }
                             $pricingTiers = array_merge($pricingTiers, [
                                 ['label' => '5-7 Pax', 'single' => $tourPackage->price_5_7, 'tandem' => $tourPackage->tandem_price_5_7 ?? $tourPackage->activity_tandem_price],
                                 ['label' => '8-14 Pax', 'single' => $tourPackage->price_8_14, 'tandem' => $tourPackage->tandem_price_8_14 ?? $tourPackage->activity_tandem_price],
@@ -379,10 +384,12 @@
 
                     @php
                         $minimumBookingQuantity = $tourPackage->minimum_booking_quantity;
-                        $priceList = collect($minimumBookingQuantity > 1
-                            ? [$tourPackage->price_2_4, $tourPackage->price_5_7, $tourPackage->price_8_14]
-                            : [$tourPackage->price_1_pax ?? ($tourPackage->price_2_4 !== null ? $tourPackage->price_2_4 + 300000 : $tourPackage->price), $tourPackage->price_2_4, $tourPackage->price_5_7, $tourPackage->price_8_14]
-                        )->filter(fn($p) => $p > 0);
+                        $priceList = collect([
+                            $tourPackage->price_1_pax,
+                            $tourPackage->price_2_4,
+                            $tourPackage->price_5_7,
+                            $tourPackage->price_8_14,
+                        ])->filter(fn($p) => $p > 0);
                         $lowestPrice = $priceList->min();
                     @endphp
 

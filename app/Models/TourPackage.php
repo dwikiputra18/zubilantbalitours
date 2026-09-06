@@ -13,14 +13,6 @@ class TourPackage extends Model
 
     protected static function booted(): void
     {
-        static::saving(function (TourPackage $tourPackage): void {
-            if ($tourPackage->is_adventure) {
-                $tourPackage->price_1_pax = null;
-            } elseif (blank($tourPackage->price_1_pax) && filled($tourPackage->price_2_4)) {
-                $tourPackage->price_1_pax = (float) $tourPackage->price_2_4 + 300000;
-            }
-        });
-
         static::creating(function (TourPackage $tourPackage): void {
             if (filled($tourPackage->tour_category_id)) {
                 return;

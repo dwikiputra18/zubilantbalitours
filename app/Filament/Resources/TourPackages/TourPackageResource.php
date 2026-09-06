@@ -151,7 +151,14 @@ class TourPackageResource extends Resource
                                 ->label('Price (1 Pax)')
                                 ->numeric()
                                 ->prefix('Rp')
-                                ->nullable(),
+                                ->nullable()
+                                ->visible(fn ($get): bool => ! Str::contains(
+                                    Str::lower(
+                                        (\App\Models\TourCategory::find($get('tour_category_id'))?->slug ?? '') . ' ' .
+                                        (\App\Models\TourCategory::find($get('tour_category_id'))?->name ?? '')
+                                    ),
+                                    'adventure'
+                                )),
                             TextInput::make('price_2_4')
                                 ->label('Price (2-4 Pax)')
                                 ->numeric()

@@ -22,7 +22,7 @@
             minimumQuantity: {{ $tourPackage->minimum_booking_quantity }},
             activitySinglePrice: {{ $tourPackage->activity_single_price ?? 0 }},
             activityTandemPrice: {{ $tourPackage->activity_tandem_price ?? 0 }},
-            price_1_pax: {{ $tourPackage->price_1_pax ?? (($tourPackage->price_2_4 ?? 0) + 300000) }},
+            price_1_pax: {{ $tourPackage->is_adventure ? 0 : ($tourPackage->price_1_pax ?? (($tourPackage->price_2_4 ?? 0) + 300000)) }},
             price_2_4: {{ $tourPackage->price_2_4 ?? 0 }},
             price_5_7: {{ $tourPackage->price_5_7 ?? 0 }},
             price_8_14: {{ $tourPackage->price_8_14 ?? 0 }},

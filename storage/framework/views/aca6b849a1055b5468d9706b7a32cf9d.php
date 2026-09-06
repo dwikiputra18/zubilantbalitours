@@ -21,7 +21,7 @@
             minimumQuantity: <?php echo e($tourPackage->minimum_booking_quantity); ?>,
             activitySinglePrice: <?php echo e($tourPackage->activity_single_price ?? 0); ?>,
             activityTandemPrice: <?php echo e($tourPackage->activity_tandem_price ?? 0); ?>,
-            price_1_pax: <?php echo e($tourPackage->price_1_pax ?? (($tourPackage->price_2_4 ?? 0) + 300000)); ?>,
+            price_1_pax: <?php echo e($tourPackage->is_adventure ? 0 : ($tourPackage->price_1_pax ?? (($tourPackage->price_2_4 ?? 0) + 300000))); ?>,
             price_2_4: <?php echo e($tourPackage->price_2_4 ?? 0); ?>,
             price_5_7: <?php echo e($tourPackage->price_5_7 ?? 0); ?>,
             price_8_14: <?php echo e($tourPackage->price_8_14 ?? 0); ?>,

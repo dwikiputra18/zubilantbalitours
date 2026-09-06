@@ -14,7 +14,9 @@ class TourPackage extends Model
     protected static function booted(): void
     {
         static::saving(function (TourPackage $tourPackage): void {
-            if (blank($tourPackage->price_1_pax) && filled($tourPackage->price_2_4)) {
+            if ($tourPackage->is_adventure) {
+                $tourPackage->price_1_pax = null;
+            } elseif (blank($tourPackage->price_1_pax) && filled($tourPackage->price_2_4)) {
                 $tourPackage->price_1_pax = (float) $tourPackage->price_2_4 + 300000;
             }
         });
@@ -100,9 +102,20 @@ class TourPackage extends Model
         return $this->belongsTo(TourCategory::class, 'tour_category_id');
     }
 
+    public function getIsAdventureAttribute(): bool
+    {
+        $category = Str::lower(($this->category?->slug ?? '') . ' ' . ($this->category?->name ?? ''));
+
+        return Str::contains($category, 'adventure');
+    }
+
     public function getMinimumBookingQuantityAttribute(): int
     {
         $category = Str::lower(($this->category?->slug ?? '') . ' ' . ($this->category?->name ?? ''));
+
+        if ($this->is_adventure) {
+            return 2;
+        }
 
         if (Str::contains($category, 'honeymoon')) {
             return 2;
